@@ -160,6 +160,57 @@
             object-fit: cover;
             z-index: -1;
         }
+         img, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+        /* Untuk tablet dan mobile (lebar <= 768px) */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 10px; /* Kurangi padding */
+        flex-direction: column; /* Susun menu vertikal jika perlu */
+    }
+    .menu {
+        flex-direction: column; /* Menu vertikal */
+        align-items: center;
+    }
+    .menu li {
+        margin: 5px 0; /* Kurangi margin */
+    }
+    .logo {
+        font-size: 18px; /* Perkecil font logo */
+    }
+    #content {
+        width: 95%; /* Lebih lebar di mobile */
+        padding: 10px;
+        top: 70px; /* Sesuaikan jarak dari navbar */
+    }
+    #webgis {
+        top: 50px; /* Sesuaikan posisi iframe */
+    }
+    .submenu {
+        width: 150px; /* Perkecil submenu */
+    }
+}
+
+/* Untuk mobile kecil (lebar <= 480px) */
+@media (max-width: 480px) {
+    .logo {
+        font-size: 16px; /* Lebih kecil lagi */
+    }
+    .menu li a {
+        font-size: 14px; /* Perkecil font menu */
+    }
+    #content {
+        font-size: 14px; /* Perkecil font konten */
+        line-height: 1.4; /* Sesuaikan line-height */
+    }
+    img {
+        max-width: 100%; /* Pastikan gambar responsif */
+        height: auto;
+    }
+}
 
     </style>
 </head>
@@ -283,6 +334,7 @@ document.querySelectorAll('.dropdown').forEach(function(dropdown) {
 
 </body>
 </html>
+
 
 
 
