@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabel umur</title>
+    <style>
+        /* Mengatur dasar tampilan halaman */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            width: 96%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
+        /* Styling untuk tabel umur */
+        #umurTable {
+            width: 80%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #umurTable th, #umurTable td {
+            padding: 9px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        #umurTable th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        #umurTable td input {
+            width: 80px;
+            padding: 2px;
+            text-align: center;
+            border-radius: 1px;
+            border: 1px solid #ccc;
+        }
+
+        #umurTable tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #umurTable tr:hover {
+            background-color: #f1f1f1;
+        }
+        #umurTable tfoot td {
+            text-align: center;  /* Centers the "TOTAL" text */
+            font-weight: bold;  /* Optional: Make the "TOTAL" text bold */
+        }
+
+        /* Styling untuk tombol simpan */
+        #saveBtn {
+            margin: 5px auto;
+            margin-right: 2px;
+            top: 10px;
+            right: 300px;
+            padding: 10px 20px;
+            background-color: #39b7ed;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            width: 100px;
+        }
+         #editBtn {
+            margin: 5px auto;
+            margin-right: 2px;
+            top: 10px;
+            right: 300px;       
+            padding: 10px 20px;
+            background-color: #39b7ed;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            width: 100px;
+        }
+
+        #saveBtn:hover {
+            background-color: #020e11;
+        }
+         #editBtn:hover {
+            background-color: #020e11;
+        }
+
+        #saveNotification {
+            position: absolute;   /* Allows free positioning */
+            top: 710px;           /* Example position */
+            right: 910px;         /* Example position */
+            padding: 10px;
+            color: rgb(9, 10, 9);
+            border-radius: 10px;
+            display: none;        /* Initially hidden */
+        }
+
+        /* Styling untuk container grafik */
+        #chartContainer {
+            width: 70%;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            height: fit-content;
+        }
+        /* Responsif untuk tampilan mobile */
+        @media (max-width: 700px) {
+            .container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            #umurTable, #chartContainer {
+                width: 100%;
+            }
+        }
+        #datetime {
+    position: fixed; /* Menggunakan fixed agar tetap di tempat meskipun halaman digulir */
+    top: 1px; /* Menentukan jarak dari atas */
+    left: 5px; /* Menentukan jarak dari kiri */
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    z-index: 100; /* Agar berada di atas elemen lain */
+}
+        
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="datetime" ></div>
+    <div class="container">
+        <!-- Tabel Umur -->
+        <div>
+            <table id="umurTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kelompok Umur (thn)</th>
+                        <th>L</th>
+                        <th>P</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                   <tr>
+                    <td>1</td>
+                    <td>0-4</td>
+                    <td><input type="number" class="l" value="865" /></td>
+                    <td><input type="number" class="p" value="872" /></td>
+                    <td><input type="number" class="total" value="1737" disabled /></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>5-9</td>
+                    <td><input type="number" class="l" value="28" /></td>
+                    <td><input type="number" class="p" value="13" /></td>
+                    <td><input type="number" class="total" value="41" disabled /></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>10-14</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>15-19</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>20-24</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>25-29</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>30-34</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>35-39</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>40-44</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>45-49</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>50-54</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>55-59</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>60-64</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>64+</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                    <!-- More rows as needed -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">TOTAL</td>
+                        <td id="totalL">0</td>
+                        <td id="totalP">0</td>
+                        <td id="totalOverall">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div id="buttonContainer">
+                <button id="saveBtn">Save</button>
+                <button id="editBtn">Edit</button>
+            </div>
+            <div id="saveNotification">Data berhasil disimpan!</div>
+        </div>
+        <!-- Diagram Batang -->
+        <div id="chartContainer">
+            <canvas id="myBarChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+    <script>
+            function updateDateTime() {
+            const now = new Date();
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            const hour = now.getHours().toString().padStart(2, '0');
+            const minute = now.getMinutes().toString().padStart(2, '0');
+            const second = now.getSeconds().toString().padStart(2, '0');
+
+            const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const dayOfWeek = daysOfWeek[now.getDay()];
+
+            const formattedDate = `${dayOfWeek}, ${day}-${month}-${year} ${hour}:${minute}:${second}`;
+            
+            document.getElementById('datetime').innerText = formattedDate;
+        }
+
+        // Call updateDateTime when the page loads to show the current time immediately
+        window.onload = function() {
+            updateDateTime(); // Initial call to show the date and time
+            setInterval(updateDateTime, 1000); // Update time every second
+        };
+        // Fungsi untuk menghitung total L + P untuk setiap baris
+        function updateTotal(row) {
+            const l = row.querySelector(".l");
+            const p = row.querySelector(".p");
+            const total = row.querySelector(".total");
+
+            // Hitung total dan update nilai input
+            total.value = (parseInt(l.value) || 0) + (parseInt(p.value) || 0);
+            updateTotalAll();  // Update total keseluruhan
+            updateBarChart();  // Update bar chart
+        }
+
+        // Fungsi untuk menghitung total keseluruhan
+        function updateTotalAll() {
+            let totalL = 0, totalP = 0, totalOverall = 0;
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                const l = row.querySelector(".l");
+                const p = row.querySelector(".p");
+                totalL += parseInt(l.value) || 0;
+                totalP += parseInt(p.value) || 0;
+            });
+
+            totalOverall = totalL + totalP;
+
+            // Update total di bawah tabel
+            document.getElementById('totalL').textContent = totalL;
+            document.getElementById('totalP').textContent = totalP;
+            document.getElementById('totalOverall').textContent = totalOverall;
+        }
+
+        // Menangani perubahan input L dan P
+        document.querySelectorAll(".l, .p").forEach(input => {
+            input.addEventListener("input", function() {
+                const row = input.closest("tr");
+                updateTotal(row);
+            });
+        });
+
+        let isEditMode = false;  // Menandakan apakah mode edit aktif atau tidak
+
+        // Fungsi untuk mengaktifkan atau menonaktifkan mode edit
+        function toggleEditMode(enable) {
+            const inputs = document.querySelectorAll('input[type="number"]:not(.total)'); // Kecuali total yang selalu disabled
+            inputs.forEach(input => {
+                input.disabled = !enable;  // Mengaktifkan atau menonaktifkan input
+            });
+            isEditMode = enable;
+        }
+
+        // Event listener untuk tombol Edit
+        document.getElementById("editBtn").addEventListener("click", function() {
+            const password = prompt("Masukkan password untuk mengedit data:");
+            const correctPassword = "adminbtg123"; // Ganti dengan password yang diinginkan
+            if (password === correctPassword) {
+                toggleEditMode(true);  // Mengaktifkan mode edit jika password benar
+                alert("Mode edit aktif. Anda dapat mengubah data.");
+            } else {
+                alert("Password salah. Mode edit tidak aktif.");  // Jika password salah
+            }
+        });
+
+        // Fungsi untuk menyimpan data ke localStorage  
+        function saveData() {  
+            const rows = document.querySelectorAll("tbody tr");  
+            rows.forEach((row, rowIndex) => {  
+                const l = row.querySelector(".l");  
+                const p = row.querySelector(".p");  
+
+                // Simpan nilai L dan P ke localStorage  
+                localStorage.setItem(`umur_l_${rowIndex}`, l.value);  
+                localStorage.setItem(`umur_p_${rowIndex}`, p.value);  
+            });  
+
+            // Tampilkan notifikasi berhasil disimpan  
+            const saveNotification = document.getElementById('saveNotification');  
+            saveNotification.style.display = 'block';  
+            
+            // Sembunyikan notifikasi setelah 3 detik  
+            setTimeout(() => {  
+                saveNotification.style.display = 'none';  
+            }, 3000);  
+            toggleEditMode(false); // Nonaktifkan edit setelah save
+        }
+
+        // Tambahkan event listener ke tombol save  
+        document.getElementById('saveBtn').addEventListener('click', saveData);
+
+        // Memuat data dari localStorage ke dalam input
+        window.onload = function() {
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach((row, rowIndex) => {
+                const l = row.querySelector(".l");
+                const p = row.querySelector(".p");
+
+                l.value = localStorage.getItem(`umur_l_${rowIndex}`) || l.value;
+                p.value = localStorage.getItem(`umur_p_${rowIndex}`) || p.value;
+                updateTotal(row);  // Pastikan total dihitung ulang saat data dimuat
+            });
+            updateTotalAll();  // Pastikan total keseluruhan juga dihitung saat halaman dimuat
+            toggleEditMode(false); // Default: edit disabled
+        };
+
+         // Update bar chart dengan Chart.js
+        let myBarChart;
+
+        function updateBarChart() {
+            const ageGroups = [];
+            const maleData = [];
+            const femaleData = [];
+
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const ageGroup = row.querySelector("td:nth-child(2)").textContent;
+                const l = parseInt(row.querySelector(".l").value) || 0;
+                const p = parseInt(row.querySelector(".p").value) || 0;
+
+                ageGroups.push(ageGroup);
+                maleData.push(l);
+                femaleData.push(p);
+            });
+
+            // Prepare chart data
+            const chartData = {
+                labels: ageGroups,
+                datasets: [
+                    {
+                        label: 'Laki-Laki',
+                        data: maleData,
+                        backgroundColor: '#42a5f5',
+                        borderColor: '#1e88e5',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Perempuan',
+                        data: femaleData,
+                        backgroundColor: '#f48fb1',
+                        borderColor: '#ec407a',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            // Create bar chart if it doesn't exist yet
+            if (!myBarChart) {
+                const ctx = document.getElementById('myBarChart').getContext('2d');
+                myBarChart = new Chart(ctx, {
+                    type: 'bar',  // Change chart type to bar
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else {
+                // Update chart with new data
+                myBarChart.data = chartData;
+                myBarChart.update();
+            }
+        }
+        updateDateTime(); // Initial call to show the date and time
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>

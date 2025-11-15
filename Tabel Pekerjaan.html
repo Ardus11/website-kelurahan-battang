@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabel Jenis Pekerjaan</title>
+    <style>
+        /* Styling the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        /* Styling for occupation table */
+        #occupationTable {
+            width: 60%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: #ddd;
+        }
+
+        #occupationTable th, #occupationTable td {
+            padding: 4px;
+            text-align: center;
+            border: 1px solid #ddd;
+            width: 80px;
+        }
+
+        #occupationTable td input {
+            width: 70px;
+            padding: 4px;
+            text-align: center;
+        }
+
+        #occupationTable th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #occupationTable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #occupationTable tr:hover {
+            background-color: #ddd;
+        }
+
+        #occupationTable tfoot td {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Container for buttons to position them side by side with space */
+        #buttonContainer {
+            position: absolute;
+            top: 400px;
+            right: 20px;
+            display: flex;
+            gap: 20px; /* Space between buttons */
+        }
+
+        /* Save button style */
+        #saveBtn {
+            padding: 10px 20px;
+            background-color: #39b7ed;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100px;
+        }
+
+        #saveBtn:hover {
+            background-color: #080606;
+        }
+
+        /* Edit button style */
+        #editBtn {
+            padding: 10px 20px;
+            background-color: #39b7ed;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100px;
+        }
+
+        #editBtn:hover {
+            background-color: #080606;
+        }
+
+        /* Notification for save success */
+        #saveNotification {
+            position: absolute;
+            top: 400px;
+            right: 240px;
+            padding: 10px;
+            color: rgb(9, 10, 9);
+            border-radius: 10px;
+            display: none;
+        }
+
+        /* Chart container styling */
+        #chartContainer {
+            width: 45%;
+            margin-top: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #datetime {
+    position: fixed; /* Menggunakan fixed agar tetap di tempat meskipun halaman digulir */
+    top: 1px; /* Menentukan jarak dari atas */
+    left: 5px; /* Menentukan jarak dari kiri */
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    z-index: 100; /* Agar berada di atas elemen lain */
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+</head>
+<body>
+    <div id="datetime" ></div>
+    <div class="container" style="display: flex; justify-content: space-between;">
+        <table id="occupationTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Jenis Pekerjaan</th>
+                    <th>L</th>
+                    <th>P</th>
+                    <th>L+P</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td>1</td>
+                    <td>Pelajar/Mahasiswa</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Belum Bekerja</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>IRT</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Petani</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Pedagang</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>PNS/ASN</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Anggota Polri/TNI</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Karyawan Swasta</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Pensiunan</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Tidak Bekerja</td>
+                    <td><input type="number" class="l" value="0" /></td>
+                    <td><input type="number" class="p" value="0" /></td>
+                    <td><input type="number" class="total" value="0" disabled /></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">TOTAL</td>
+                    <td id="totall">0</td>
+                    <td id="totalp">0</td>
+                    <td id="totalkeseluruhan">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div id="chartContainer">
+            <canvas id="myPieChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <!-- Container for buttons -->
+    <div id="buttonContainer">
+        <button id="saveBtn">Save</button>
+        <button id="editBtn">Edit</button>
+    </div>
+
+    <div id="saveNotification">Data berhasil disimpan!</div>
+
+    <script>
+         function updateDateTime() {
+            const now = new Date();
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            const hour = now.getHours().toString().padStart(2, '0');
+            const minute = now.getMinutes().toString().padStart(2, '0');
+            const second = now.getSeconds().toString().padStart(2, '0');
+
+            const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const dayOfWeek = daysOfWeek[now.getDay()];
+
+            const formattedDate = `${dayOfWeek}, ${day}-${month}-${year} ${hour}:${minute}:${second}`;
+            
+            document.getElementById('datetime').innerText = formattedDate;
+        }
+
+        // Call updateDateTime when the page loads to show the current time immediately
+        window.onload = function() {
+            updateDateTime(); // Initial call to show the date and time
+            setInterval(updateDateTime, 1000); // Update time every second
+        };
+        // Function to calculate the total L + P for each row
+        function updateTotal(row) {
+            const l = row.querySelector(".l");
+            const p = row.querySelector(".p");
+            const total = row.querySelector(".total");
+
+            total.value = (parseInt(l.value) || 0) + (parseInt(p.value) || 0);
+        }
+
+        // Function to update footer totals
+        function updateFooterTotals() {
+            let totalL = 0, totalP = 0, totalKeseluruhan = 0;
+
+            document.querySelectorAll("#occupationTable tbody tr").forEach(row => {
+                const l = parseInt(row.querySelector(".l").value) || 0;
+                const p = parseInt(row.querySelector(".p").value) || 0;
+                const total = parseInt(row.querySelector(".total").value) || 0;
+
+                totalL += l;
+                totalP += p;
+                totalKeseluruhan += total;
+            });
+
+            document.getElementById("totall").textContent = totalL;
+            document.getElementById("totalp").textContent = totalP;
+            document.getElementById("totalkeseluruhan").textContent = totalKeseluruhan;
+        }
+
+        // Add event listeners for input changes
+        document.querySelectorAll(".l, .p").forEach(input => {
+            input.addEventListener("input", function() {
+                const row = input.closest("tr");
+                updateTotal(row);
+                updateFooterTotals();
+                updatePieChart();
+            });
+        });
+
+        let isEditMode = false;  // Menandakan apakah mode edit aktif atau tidak
+
+        // Fungsi untuk mengaktifkan atau menonaktifkan mode edit
+        function toggleEditMode(enable) {
+            const inputs = document.querySelectorAll('input[type="number"]:not(.total)'); // Kecuali total yang selalu disabled
+            inputs.forEach(input => {
+                input.disabled = !enable;  // Mengaktifkan atau menonaktifkan input
+            });
+            isEditMode = enable;
+        }
+
+        // Event listener untuk tombol Edit
+        document.getElementById("editBtn").addEventListener("click", function() {
+            const password = prompt("Masukkan password untuk mengedit data:");
+            const correctPassword = "adminbtg123"; // Ganti dengan password yang diinginkan
+            if (password === correctPassword) {
+                toggleEditMode(true);  // Mengaktifkan mode edit jika password benar
+                alert("Mode edit aktif. Anda dapat mengubah data.");
+            } else {
+                alert("Password salah. Mode edit tidak aktif.");  // Jika password salah
+            }
+        });
+
+        // Save button functionality
+        document.getElementById("saveBtn").addEventListener("click", function() {
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach((row, rowIndex) => {
+                const l = row.querySelector(".l");
+                const p = row.querySelector(".p");
+
+                localStorage.setItem(`occupation_l_${rowIndex}`, l.value);
+                localStorage.setItem(`occupation_p_${rowIndex}`, p.value);
+            });
+
+            const saveNotification = document.getElementById("saveNotification");
+            saveNotification.style.display = "block";
+            setTimeout(() => saveNotification.style.display = "none", 3000);
+            toggleEditMode(false); // Nonaktifkan edit setelah save
+        });
+
+        // Load saved data when page loads
+        window.onload = function() {
+            updateDateTime(); // Initial call to show the date and time
+            setInterval(updateDateTime, 1000); // Update time every second
+
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach((row, rowIndex) => {
+                const l = row.querySelector(".l");
+                const p = row.querySelector(".p");
+
+                l.value = localStorage.getItem(`occupation_l_${rowIndex}`) || l.value;
+                p.value = localStorage.getItem(`occupation_p_${rowIndex}`) || p.value;
+                updateTotal(row);
+            });
+
+            updateFooterTotals();
+            updatePieChart();
+            toggleEditMode(false); // Default: edit disabled
+        };
+
+        // Update pie chart function with distinct colors
+        function updatePieChart() {
+            const labels = [];
+            const data = [];
+            const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FFC107', '#9C27B0', '#FF5733', '#C70039', '#FF6384', '#36A2EB'];
+
+            document.querySelectorAll("#occupationTable tbody tr").forEach((row, index) => {
+                const occupation = row.querySelector("td:nth-child(2)").textContent;
+                const total = parseInt(row.querySelector(".total").value) || 0;
+
+                if (total > 0) {
+                    labels.push(occupation);
+                    data.push(total);
+                }
+            });
+
+            const ctx = document.getElementById("myPieChart").getContext("2d");
+            if (window.pieChart) {
+                window.pieChart.destroy();
+            }
+            window.pieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Penduduk Berdasarkan Pekerjaan',
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length) // Slice ensures we only use enough colors for the labels
+                    }]
+                },
+                options: {
+            responsive: true,
+            plugins: {
+                // Plugin untuk menampilkan label di dalam pie chart
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            const label = tooltipItem.label;
+                            const value = tooltipItem.raw;
+                            return `${label}: ${value}`;
+                        }
+                    }
+                },
+                datalabels: {
+                    color: '#fff', // Warna teks di dalam diagram
+                    formatter: (value, ctx) => {
+                        const percentage = (value / data.reduce((a, b) => a + b, 0)) * 100;
+                        const label = labels[ctx.dataIndex];
+                        return `${label} ${Math.round(percentage)}%`; // Format label untuk setiap irisan
+                    },
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    }
+                }
+            }
+                }
+            });
+        }
+        updateDateTime(); // Initial call to show the date and time
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>

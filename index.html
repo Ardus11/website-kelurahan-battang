@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat datang di Kelurahan Battang</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- CSS langsung dalam tag <style> -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-size: cover; 
+            background-position: center;
+            background-attachment: fixed;
+            padding-top: 2px;
+            margin: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(32, 8, 57, 0.771);
+            padding: 15px 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 22px;
+            color: #f5f0f0;
+        }
+
+        .menu {
+            list-style: none;
+            display: flex;
+        }
+
+        .menu li {
+            position: relative;
+            margin: 0 15px;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: rgb(189, 216, 13);
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px;
+            display: block;
+        }
+
+        .menu li a:hover {
+            color: #09c4a5;
+        }
+
+        .dropdown i {
+            margin-left: 5px;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background: rgb(211, 211, 207);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            border-radius: 5px;
+        }
+
+        .submenu li {
+            width: 100%;
+        }
+
+        .submenu li a {
+            padding: 10px;
+            font-size: 14px;
+            color: #aa1e1e;
+        }
+
+        .submenu li a:hover {
+            background: #007bff;
+            color: rgba(8, 4, 20, 0.97);
+            width: 180px;
+        }
+
+        #webgis {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            z-index: 999;
+            display: block;
+        }
+
+        .hero, .content-area {
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            z-index: 10;
+        }
+        #content {
+    display: none;
+    position: absolute; /* Menyesuaikan posisi agar berada di atas video */
+    top: 80px; /* Jarak dari navbar */
+    left: 50%;
+    transform: translateX(-50%); /* Agar konten tetap di tengah */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.581);
+    border-radius: 5px;
+    min-height: 200px;
+    width: 90%;
+    max-width: 1300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10; /* Pastikan di atas elemen lain */
+    font-family:Arial, Helvetica, sans-serif; /* Ganti dengan font yang Anda inginkan */
+    font-size: 16px; /* Ukuran font */
+    line-height: 1.5; /* Jarak antar baris */
+}
+
+        .hero {
+            background-color:transparent;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+        }
+
+        header {
+    position: relative;
+    height: 100vh;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px; /* Tambahkan margin agar video turun */
+}
+        #background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">KELURAHAN BATTANG KEC. WARA BARAT KOTA PALOPO</div>
+        <ul class="menu">
+            <li class="dropdown">
+                <a href="#">Beranda <i class="fa fa-chevron-down"></i></a>
+                <ul class="submenu">
+                    <li><a href="#" onclick="showContent('Profil')">Profil</a></li>
+                    <li><a href="#" onclick="showContent('visiMisi')">Visi & Misi</a></li>
+                    <li><a href="#" onclick="showContent('profilPejabat')">Profil Pejabat</a></li>
+                    <li><a href="#" onclick="showContent('struktur')">Struktur Organisasi</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Penduduk<i class="fa fa-chevron-down"></i></a>
+                <ul class="submenu">
+                    <li><a href="#" onclick="showContent('DataPenduduk')">Penduduk terkini</a></li>
+                    <li><a href="#" onclick="showContent('Datapendudukagama')">Penduduk Berdasarkan Agama</a></li>
+                    <li><a href="#" onclick="showContent('Datapendudukumur')">Penduduk Berdasarkan Umur</a></li>
+                    <li><a href="#" onclick="showContent('Datapendudukstatus')">Penduduk Berdsarkan Satus Perkawinan</a></li>
+                    <li><a href="#" onclick="showContent('Datapendudukpendidikan')">Penduduk Berdasarkan Tingkat Pendidikan</a></li>
+                    <li><a href="#" onclick="showContent('Datapendududkpekerjaan')">Penduduk Berdasarkan Jenis Pekerjaan</a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0);"id="showMap">Peta</a></li>
+            <li><a href="#">Wisata</a></li>
+            <li><a href="#">Informasi</a></li>
+        </ul>
+    </nav>
+
+    <!-- Background Video -->
+    <header>
+        <video autoplay muted loop id="background-video">
+            <source src="WhatsApp Video 2025-02-14 at 00.22.41.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </header>
+
+    <!-- Konten utama dan iframe peta -->
+    <section class="hero"></section>
+    <div id="content" class="content-area"></div>
+
+    <!-- iframe untuk WebGIS -->
+    <iframe id="webgis" src="https://ardus11.github.io/Peta-Kelurahan-Battang/" style="display: none; border: none;"></iframe>
+
+    <!-- Script untuk interaksi -->
+    <script>
+        // Fungsi untuk menampilkan konten berdasarkan menu yang diklik
+        function showContent(type) {
+            let contentDiv = document.getElementById("content");
+
+            let contentData = {
+                Profil: `<h2>Profil Kelurahan Battang</h2>
+                          <p>Kelurahan Battang merupakan salah satu kelurahan yang terletak di kecamatan wara barat kota palopo,dengan luas wilayah 38.28 Km2  (sumber data : peta desa Indonesia tahun 2022,BIG) kelurahan ini merupakan daerah perbukitan dengan batas wilayah sebagai berikut :</p>
+                          <ul>
+                              <li>Batas Utara :</strong> Kelurahan Padang Lambe</li>
+                              <li>Batas Selatan :</strong> Kecamatan Mungkajang,Kelurahan lebang</li>
+                              <li>Batas Timur :</strong> Kecamatan Bara</li>
+                              <li>Batas Barat :</strong> Kelurahan Battang Barat</li>
+                          </ul>
+                          <p>Secara astronomis kelurahan ini berada pada 2°56'31.56" LS - 3°00'28.54" LS dan 120°05'02.80" BT - 120°10'17.53" BT. Sebagai wilayah perbukitan kondisi lahan di kelurahan Battang didominasi oleh lahan perkebunan dengan jenis tanaman yang paling dominan yakni cengkeh dan tanaman buah seperti durian, langsat, rambutan dan jenis tanaman buah lainnya.</p>
+                          <img src="Peta Topografi Battang.jpg" alt="Deskripsi Gambar" style="display: block; margin: 0 auto; width: 100%; max-width: 700px; margin-top: 20px;margin-bottom: 20px;">
+                          <p>Wilayah ini sangat strategis karena merupakan jalan lintas utama dari Kota Palopo ke kabupaten Toraja,Toraja Utara, dan Enrekang hal ini kemudian dimanfaatkan oleh sebagian masyarakat untuk berjualan buah di beberapa titik di sepanjang jalan lintas tersebut.</p>
+                          <img src="pedagang buah.jpg" alt="Deskripsi Gambar" style="display: block; margin: 0 auto; width: 100%; max-width: 600px; margin-top: 20px;margin-bottom: 20px;">`,  
+
+                visiMisi: `<h2>Visi & Misi</h2><p>Visi: Menjadi kelurahan terbaik dalam pelayanan masyarakat.</p>`,
+                profilPejabat:`<img src="Lurah Battang.jpeg" alt="Deskripsi Gambar" style="display: block; margin: 0 auto; width: 100%; max-width: 200px; margin-top: 20px;margin-bottom: 20px;">
+                             <strong>Rahman,SE</strong> merupakan putra daerah dan juga putra daerah pertama yang menjabat Lurah di tempat kelahiran beliau sendiri, lahir pada tanggal </p>`,                    
+                struktur: `<img src="file:///D:/MAPS/PALOPO/KELURAHAN%20BATTANG/Website_Battang/Website_Kelurahan_Battang/Blue%20Minimalist%20Organizational%20Structural%20Poster.svg" alt="Deskripsi Gambar" style="display: block; margin: 0 auto; width: 100%; max-width: 1000px; margin-top: 20px;margin-bottom: 20px;">`,
+                DataPenduduk: `<h2 style="text-align: center; margin-bottom: 20px;">Data Penduduk Kondisi Terkini Kelurahan Battang</h2> 
+                               <iframe src="file:///D:/MAPS/PALOPO/KELURAHAN%20BATTANG/Website_Battang/Website_Kelurahan_Battang/Tabel%20total.html"  
+                               width="100%" height="800" frameborder="0" style="border: none; margin: 0 auto; display: block;" scrolling="no">`,
+                Datapendudukagama: `<h2 style="text-align: center; margin-bottom: 20px;">Penduduk Berdasarkan Agama Kelurahan Battang</h2> 
+                                    <iframe src="file:///D:/MAPS/PALOPO/KELURAHAN%20BATTANG/Website_Battang/Website_Kelurahan_Battang/tabel%20agama.html"  
+                                    width="100%" height="800" frameborder="0" style="border: none; margin: 0 auto; display: block;" scrolling="no">`,
+                Datapendudukumur: `<h2 style="text-align: center; margin-bottom: 20px;">Penduduk Berdasarkan Umur Kelurahan Battang</h2> 
+                                    <iframe src="file:///D:/MAPS/PALOPO/KELURAHAN%20BATTANG/Website_Battang/Website_Kelurahan_Battang/Tabel%20umur.html"  
+                                    width="100%" height="800" frameborder="0" style="border: none; margin: 0 auto; display: block;" scrolling="no">`,
+                Datapendudukstatus: `<h2 style="text-align: center; margin-bottom: 20px;">Penduduk Berdasarkan Status Perkawinan Kelurahan Battang</h2> 
+                                    <iframe src="file:///D:/MAPS/PALOPO/KELURAHAN%20BATTANG/Website_Battang/Website_Kelurahan_Battang/tabel%20status%20nikah.html"  
+                                    width="100%" height="800" frameborder="0" style="border: none; margin: 0 auto; display: block;" scrolling="no">`,
+                Datapendudukpendidikan:`<h2 style="text-align: center; margin-bottom: 20px;">Penduduk Berdasarkan Tingkat Pendidikan Kelurahan Battang</h2> 
+                                    <iframe src="file:///D:/MAPS/PALOPO/KELURAHAN%20BATTANG/Website_Battang/Website_Kelurahan_Battang/tabel%20Pendidikan.html"  
+                                    width="100%" height="800" frameborder="0" style="border: none; margin: 0 auto; display: block;" scrolling="no">`,
+                Datapendududkpekerjaan:`<h2 style="text-align: center; margin-bottom: 20px;">Penduduk Berdasarkan Jenis Pekerjaan Kelurahan Battang</h2> 
+                                    <iframe src="file:///D:/MAPS/PALOPO/KELURAHAN%20BATTANG/Website_Battang/Website_Kelurahan_Battang/Tabel%20Pekerjaan.html"  
+                                    width="100%" height="800" frameborder="0" style="border: none; margin: 0 auto; display: block;" scrolling="no">`,
+                
+            };
+
+            contentDiv.innerHTML = contentData[type] || "<h2>Data Tidak Ditemukan</h2>";
+            contentDiv.style.display = "block"; // Menampilkan konten
+            document.getElementById("webgis").style.display = 'none'; // Menyembunyikan iframe WebGIS
+        }
+
+        // Menampilkan iframe WebGIS ketika menu "Maps" diklik
+        document.getElementById('showMap').addEventListener('click', function(event) {
+            event.preventDefault();
+            var iframe = document.getElementById("webgis");
+            iframe.style.display = (iframe.style.display === 'none' || iframe.style.display === '') ? 'block' : 'none';
+            document.getElementById("content").style.display = 'none'; // Menyembunyikan konten lain
+        });
+
+        // Menampilkan dropdown saat mouse hover
+document.querySelectorAll('.dropdown').forEach(function(dropdown) {
+    dropdown.addEventListener('mouseenter', function() {
+        this.querySelector('.submenu').style.display = 'block';
+    });
+
+    dropdown.addEventListener('mouseleave', function() {
+        this.querySelector('.submenu').style.display = 'none';
+    });
+});
+
+    </script>
+
+</body>
+</html>

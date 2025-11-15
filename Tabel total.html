@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabel Penduduk Kel. Battang</title>
+    <style>
+      body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.table-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 30px 30px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+td input[type="number"] {
+    width: 100%;
+    padding: 6px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    text-align: center;
+    outline: none;
+}
+
+td input[type="number"]:focus {
+    border-color: #4CAF50;
+}
+
+td input[type="number"]:hover {
+    border-color: #45a049;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+tfoot td {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+tfoot td[colspan="3"] {
+    text-align: right;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 1px;
+    box-sizing: border-box;
+}
+
+.header-row {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+.penduduk-awal {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.penduduk-awal td {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.penduduk-awal td[colspan="3"] {
+    text-align: center;
+}
+.save-btn, .edit-btn{
+    background-color: #39b7ed;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px; /* Jarak yang sangat dekat dengan tabel */
+}
+
+.save-btn:hover, .edit-btn:hover {
+    background-color: #080606;
+}
+
+ #saveNotification {
+                position: absolute;
+                top: 50px;
+                right: 890px;
+                padding: 10px;
+                color: rgb(9, 10, 9);
+                border-radius: 10px;
+                display: none;
+            }
+
+/* Penyesuaian posisi tombol Save */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;  /* Menyusun tombol Save di pojok kanan bawah */
+    justify-content: flex-start;
+}
+
+.table-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;  /* Menghapus margin bawah */
+}
+
+.save-container {
+    text-align: right;
+    margin-top: 10px;  /* Jarak tombol dengan tabel */
+}
+#datetime {
+    position: fixed; /* Menggunakan fixed agar tetap di tempat meskipun halaman digulir */
+    top: 40px; /* Menentukan jarak dari atas */
+    left: 1050px; /* Menentukan jarak dari kiri */
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    z-index: 100; /* Agar berada di atas elemen lain */
+}
+    </style>
+</head>
+<body>
+    <div id="datetime"></div>
+    <div class="container">
+        <div class="table-container">
+            <button id="editButton" class="edit-btn">Edit</button>
+            <button id="saveButton" class="save-btn">Save</button>
+        </div>
+
+        <div id="saveNotification" style="display:none;">Data berhasil disimpan!</div>
+
+        <table id="table">
+       <thead>
+            <tr class="penduduk-awal">
+                <td colspan="3"></td>
+                <td colspan="4">Penduduk Awal</td>
+                <td colspan="3">Lahir</td>
+                <td colspan="3">Meninggal</td>
+                <td colspan="3">Datang</td>
+                <td colspan="3">Pindah</td>
+                <td colspan="3">Penduduk Akhir Bulan</td>
+            </tr>
+            <tr>
+                <th>NO</th>
+                <th>RW</th>
+                <th>RT</th>
+                <th>KK</th>
+                <th>L</th>
+                <th>P</th>
+                <th>L+P</th>
+                <th>L</th>
+                <th>P</th>
+                <th>L+P</th>
+                <th>L</th>
+                <th>P</th>
+                <th>L+P</th>
+                <th>L</th>
+                <th>P</th>
+                <th>L+P</th>
+                <th>L</th>
+                <th>P</th>
+                <th>L+P</th>
+                <th>L</th>
+                <th>P</th>
+                <th>L+P</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example Data for First Group -->
+            <tr>
+                <td>1</td>
+                <td>I</td>
+                <td>1</td>
+                <td><input type="number" value="80" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="122" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="149" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">271</span></td>
+                <td><input type="number" value="12" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="7" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">19</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>2</td>
+                <td><input type="number" value="49" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="93" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="85" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">178</span></td>
+                <td><input type="number" value="10" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="5" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">15</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>II</td>
+                <td>1</td>
+                <td><input type="number" value="43" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="64" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="63" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">127</span></td>
+                <td><input type="number" value="8" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="4" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">12</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>2</td>
+                <td><input type="number" value="61" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="88" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="105" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">193</span></td>
+                <td><input type="number" value="14" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="3" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">17</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>III</td>
+                <td>1</td>
+                <td><input type="number" value="58" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="89" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="81" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">170</span></td>
+                <td><input type="number" value="10" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="6" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">16</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>2</td>
+                <td><input type="number" value="57" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="106" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="101" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">207</span></td>
+                <td><input type="number" value="20" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="10" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">30</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>IV</td>
+                <td>1</td>
+                <td><input type="number" value="58" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="89" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="81" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">170</span></td>
+                <td><input type="number" value="10" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="6" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">16</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>2</td>
+                <td><input type="number" value="57" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="106" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="101" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">207</span></td>
+                <td><input type="number" value="20" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="10" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">30</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>V</td>
+                <td>1</td>
+                <td><input type="number" value="58" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="89" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="81" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">170</span></td>
+                <td><input type="number" value="10" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="6" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">16</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>2</td>
+                <td><input type="number" value="57" class="kk" onchange="updateSums()"></td>
+                <td><input type="number" value="106" class="l" onchange="updateSums()"></td>
+                <td><input type="number" value="101" class="p" onchange="updateSums()"></td>
+                <td><span class="lplusp">207</span></td>
+                <td><input type="number" value="20" class="lahirL" onchange="updateSums()"></td>
+                <td><input type="number" value="10" class="lahirP" onchange="updateSums()"></td>
+                <td><span class="lahirLPlusP">30</span></td>
+                <td><input type="number" value="1" class="MeninggalL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="MeninggalP" onchange="updateSums()"></td>
+                <td><span class="MeninggalLPlusP">2</span></td>
+                <td><input type="number" value="1" class="DatangL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="DatangP" onchange="updateSums()"></td>
+                <td><span class="DatangLPlusP">2</span></td>
+                <td><input type="number" value="1" class="PindahL" onchange="updateSums()"></td>
+                <td><input type="number" value="1" class="PindahP" onchange="updateSums()"></td>
+                <td><span class="PindahLPlusP">2</span></td>
+                <td><input type="number" value="0" class="PendudukAkhirL" readonly></td>
+                <td><input type="number" value="0" class="PendudukAkhirP" readonly></td>
+                <td><span class="PendudukAkhirLPlusP">2</span></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">TOTAL</td>
+                <td id="totalKK">531</td>
+                <td id="totalL">892</td>
+                <td id="totalP">886</td>
+                <td id="totalLPlusP">1778</td>
+                <td id="totalLahirL">64</td>
+                <td id="totalLahirP">26</td>
+                <td id="totalLahirLPlusP">90</td>
+                <td id="totalMeninggalL">64</td>
+                <td id="totalMeninggalP">26</td>
+                <td id="totalMeninggalLPlusP">90</td>
+                <td id="totalDatangL">64</td>
+                <td id="totalDatangP">26</td>
+                <td id="totalDatangLPlusP">90</td>
+                <td id="totalPindahL">64</td>
+                <td id="totalPindahP">26</td>
+                <td id="totalPindahLPlusP">90</td>
+                <td id="totalPendudukAkhirL">64</td>
+                <td id="totalPendudukAkhirP">26</td>
+                <td id="totalPendudukAkhirLPlusP">90</td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
+    <script>
+    function updateSums() {
+        const rows = document.querySelectorAll("tbody tr");
+        let totalKK = 0, totalL = 0, totalP = 0, totalLPlusP = 0;
+        let totalLahirL = 0, totalLahirP = 0, totalLahirLPlusP = 0;
+        let totalMeninggalL = 0, totalMeninggalP = 0, totalMeninggalLPlusP = 0;
+        let totalDatangL = 0, totalDatangP = 0, totalDatangLPlusP = 0;
+        let totalPindahL = 0, totalPindahP = 0, totalPindahLPlusP = 0;
+        let totalPendudukAkhirL = 0, totalPendudukAkhirP = 0, totalPendudukAkhirLPlusP = 0;
+
+
+        rows.forEach(row => {
+            const kk = row.querySelector(".kk");
+            const l = row.querySelector(".l");
+            const p = row.querySelector(".p");
+            const lplusp = row.querySelector(".lplusp");
+
+            const lahirL = row.querySelector(".lahirL");
+            const lahirP = row.querySelector(".lahirP");
+            const lahirLPlusP = row.querySelector(".lahirLPlusP");
+
+            const MeninggalL = row.querySelector(".MeninggalL");
+            const MeninggalP = row.querySelector(".MeninggalP");
+            const MeninggalLPlusP = row.querySelector(".MeninggalLPlusP");
+
+            const DatangL = row.querySelector(".DatangL");
+            const DatangP = row.querySelector(".DatangP");
+            const DatangLPlusP = row.querySelector(".DatangLPlusP");
+
+            const PindahL = row.querySelector(".PindahL");
+            const PindahP = row.querySelector(".PindahP");
+            const PindahLPlusP = row.querySelector(".PindahLPlusP");
+
+            
+
+            // Penduduk Awal Calculation (L+P)
+            const kkValue = parseInt(kk.value) || 0;
+            const lValue = parseInt(l.value) || 0;
+            const pValue = parseInt(p.value) || 0;
+            lplusp.textContent = lValue + pValue;
+
+            totalKK += kkValue;
+            totalL += lValue;
+            totalP += pValue;
+            totalLPlusP += lValue + pValue;
+
+            // Lahir Calculation (L+P)
+            const lahirLValue = parseInt(lahirL.value) || 0;
+            const lahirPValue = parseInt(lahirP.value) || 0;
+            lahirLPlusP.textContent = lahirLValue + lahirPValue;
+
+            totalLahirL += lahirLValue;
+            totalLahirP += lahirPValue;
+            totalLahirLPlusP += lahirLValue + lahirPValue;
+
+            // Meninggal Calculation (L+P)
+            const MeninggalLValue = parseInt(MeninggalL.value) || 0;
+            const MeninggalPValue = parseInt(MeninggalP.value) || 0;
+            MeninggalLPlusP.textContent = MeninggalLValue + MeninggalPValue;
+
+            totalMeninggalL += MeninggalLValue;
+            totalMeninggalP += MeninggalPValue;
+            totalMeninggalLPlusP += MeninggalLValue + MeninggalPValue;
+
+            // Datang Calculation (L+P)
+            const DatangLValue = parseInt(DatangL.value) || 0;
+            const DatangPValue = parseInt(DatangP.value) || 0;
+            DatangLPlusP.textContent = DatangLValue + DatangPValue;
+
+            totalDatangL += DatangLValue;
+            totalDatangP += DatangPValue;
+            totalDatangLPlusP += DatangLValue + DatangPValue;
+
+             // Pindah Calculation (L+P)
+            const PindahLValue = parseInt(PindahL.value) || 0;
+            const PindahPValue = parseInt(PindahP.value) || 0;
+            PindahLPlusP.textContent = PindahLValue + PindahPValue;
+
+            totalPindahL += PindahLValue;
+            totalPindahP += PindahPValue;
+            totalPindahLPlusP += PindahLValue + PindahPValue;
+
+            // Penduduk Akhir Bulan Calculation
+            const L_akhir = lValue + lahirLValue - MeninggalLValue + DatangLValue - PindahLValue;
+            const P_akhir = pValue + lahirPValue - MeninggalPValue + DatangPValue - PindahPValue;
+            row.querySelector(".PendudukAkhirL").value = L_akhir;
+            row.querySelector(".PendudukAkhirP").value = P_akhir;
+            row.querySelector(".PendudukAkhirLPlusP").textContent = L_akhir + P_akhir;
+
+            totalPendudukAkhirL += L_akhir;
+            totalPendudukAkhirP += P_akhir;
+            totalPendudukAkhirLPlusP += L_akhir + P_akhir;
+        });
+
+        // Update totals for Penduduk Awal
+        document.getElementById("totalKK").textContent = totalKK;
+        document.getElementById("totalL").textContent = totalL;
+        document.getElementById("totalP").textContent = totalP;
+        document.getElementById("totalLPlusP").textContent = totalLPlusP;
+
+        // Update totals for Lahir
+        document.getElementById("totalLahirL").textContent = totalLahirL;
+        document.getElementById("totalLahirP").textContent = totalLahirP;
+        document.getElementById("totalLahirLPlusP").textContent = totalLahirLPlusP;
+
+        // Update totals for Meninggal
+        document.getElementById("totalMeninggalL").textContent = totalMeninggalL;
+        document.getElementById("totalMeninggalP").textContent = totalMeninggalP;
+        document.getElementById("totalMeninggalLPlusP").textContent = totalMeninggalLPlusP;
+
+        // Update totals for Datang
+        document.getElementById("totalDatangL").textContent = totalDatangL;
+        document.getElementById("totalDatangP").textContent = totalDatangP;
+        document.getElementById("totalDatangLPlusP").textContent = totalDatangLPlusP;
+
+        // Update totals for Pindah
+        document.getElementById("totalPindahL").textContent = totalPindahL;
+        document.getElementById("totalPindahP").textContent = totalPindahP;
+        document.getElementById("totalPindahLPlusP").textContent = totalPindahLPlusP;
+
+        // Update totals for Penduduk Akhir Bulan
+        document.getElementById("totalPendudukAkhirL").textContent = totalPendudukAkhirL;
+        document.getElementById("totalPendudukAkhirP").textContent = totalPendudukAkhirP;
+        document.getElementById("totalPendudukAkhirLPlusP").textContent = totalPendudukAkhirLPlusP;
+    }
+
+   function updateDateTime() {
+            const now = new Date();
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            const hour = now.getHours().toString().padStart(2, '0');
+            const minute = now.getMinutes().toString().padStart(2, '0');
+            const second = now.getSeconds().toString().padStart(2, '0');
+
+            const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const dayOfWeek = daysOfWeek[now.getDay()];
+
+            const formattedDate = `${dayOfWeek}, ${day}-${month}-${year} ${hour}:${minute}:${second}`;
+            
+            document.getElementById('datetime').innerText = formattedDate;
+        }
+
+    // Gabungkan semua inisialisasi di window.onload
+    window.onload = function() {
+        // Mengambil dan mengisi data dari localStorage
+        const rows = document.querySelectorAll("tbody tr");
+
+        rows.forEach((row, rowIndex) => {
+            const kk = row.querySelector(".kk");
+            const l = row.querySelector(".l");
+            const p = row.querySelector(".p");
+            
+            // Mengambil nilai dari localStorage, jika ada
+            kk.value = localStorage.getItem(`kk_${rowIndex}`) || kk.value;
+            l.value = localStorage.getItem(`l_${rowIndex}`) || l.value;
+            p.value = localStorage.getItem(`p_${rowIndex}`) || p.value;
+            
+            // Mengambil data lainnya dari localStorage
+            const lahirL = row.querySelector(".lahirL");
+            const lahirP = row.querySelector(".lahirP");
+            const MeninggalL = row.querySelector(".MeninggalL");
+            const MeninggalP = row.querySelector(".MeninggalP");
+            const DatangL = row.querySelector(".DatangL");
+            const DatangP = row.querySelector(".DatangP");
+            const PindahL = row.querySelector(".PindahL");
+            const PindahP = row.querySelector(".PindahP");
+
+            // Memuat data dari localStorage
+            lahirL.value = localStorage.getItem(`lahirL_${rowIndex}`) || lahirL.value;
+            lahirP.value = localStorage.getItem(`lahirP_${rowIndex}`) || lahirP.value;
+            MeninggalL.value = localStorage.getItem(`MeninggalL_${rowIndex}`) || MeninggalL.value;
+            MeninggalP.value = localStorage.getItem(`MeninggalP_${rowIndex}`) || MeninggalP.value;
+            DatangL.value = localStorage.getItem(`DatangL_${rowIndex}`) || DatangL.value;
+            DatangP.value = localStorage.getItem(`DatangP_${rowIndex}`) || DatangP.value;
+            PindahL.value = localStorage.getItem(`PindahL_${rowIndex}`) || PindahL.value;
+            PindahP.value = localStorage.getItem(`PindahP_${rowIndex}`) || PindahP.value;
+        });
+
+        // Panggil fungsi updateSums setelah data dimuat
+        updateSums();
+        // Update waktu dan tanggal
+        updateDateTime();
+        setInterval(updateDateTime, 1000);  // Memperbarui waktu setiap detik
+        // Nonaktifkan edit mode secara default
+        toggleEditMode(false);
+    };
+
+    // Fungsi Save Button untuk menyimpan data ke localStorage
+    document.getElementById("saveButton").addEventListener("click", function() {
+        if (isEditMode) {
+            const rows = document.querySelectorAll("tbody tr");
+
+            // Menyimpan data setiap baris ke localStorage
+            rows.forEach((row, rowIndex) => {
+                const kk = row.querySelector(".kk");
+                const l = row.querySelector(".l");
+                const p = row.querySelector(".p");
+
+                // Menyimpan input ke localStorage berdasarkan index baris
+                localStorage.setItem(`kk_${rowIndex}`, kk.value);
+                localStorage.setItem(`l_${rowIndex}`, l.value);
+                localStorage.setItem(`p_${rowIndex}`, p.value);
+
+                // Menyimpan data lain (misalnya lahir, meninggal, datang, pindah)
+                const lahirL = row.querySelector(".lahirL");
+                const lahirP = row.querySelector(".lahirP");
+                const MeninggalL = row.querySelector(".MeninggalL");
+                const MeninggalP = row.querySelector(".MeninggalP");
+                const DatangL = row.querySelector(".DatangL");
+                const DatangP = row.querySelector(".DatangP");
+                const PindahL = row.querySelector(".PindahL");
+                const PindahP = row.querySelector(".PindahP");
+
+                localStorage.setItem(`lahirL_${rowIndex}`, lahirL.value);
+                localStorage.setItem(`lahirP_${rowIndex}`, lahirP.value);
+                localStorage.setItem(`MeninggalL_${rowIndex}`, MeninggalL.value);
+                localStorage.setItem(`MeninggalP_${rowIndex}`, MeninggalP.value);
+                localStorage.setItem(`DatangL_${rowIndex}`, DatangL.value);
+                localStorage.setItem(`DatangP_${rowIndex}`, DatangP.value);
+                localStorage.setItem(`PindahL_${rowIndex}`, PindahL.value);
+                localStorage.setItem(`PindahP_${rowIndex}`, PindahP.value);
+            });
+
+            // Menampilkan pemberitahuan bahwa data telah disimpan
+            const saveNotification = document.getElementById("saveNotification");
+            saveNotification.style.display = "block";
+
+            // Menyembunyikan pemberitahuan setelah 3 detik
+            setTimeout(() => {
+                saveNotification.style.display = "none";
+            }, 3000);
+        } else {
+            alert("Anda harus mengaktifkan mode edit terlebih dahulu.");
+        }
+    });
+
+    let isEditMode = false;  // Menandakan apakah mode edit aktif atau tidak
+
+    // Fungsi untuk mengaktifkan atau menonaktifkan mode edit
+    function toggleEditMode(enable) {
+        const inputs = document.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.disabled = !enable;  // Mengaktifkan atau menonaktifkan input
+        });
+        isEditMode = enable;
+    }
+
+    // Fungsi untuk prompt password dan aktifkan edit
+    document.getElementById("editButton").addEventListener("click", function() {
+        const password = prompt("Masukkan password untuk mengedit data:");
+        const correctPassword = "adminbtg123"; // Ganti dengan password yang diinginkan
+        if (password === correctPassword) {
+            toggleEditMode(true);  // Mengaktifkan mode edit jika password benar
+            alert("Mode edit aktif. Anda dapat mengubah data.");
+        } else {
+            alert("Password salah. Mode edit tidak aktif.");  // Jika password salah
+        }
+    });
+    </script>
+</body>
+</html>
